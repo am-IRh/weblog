@@ -4,7 +4,6 @@ const express = require("express");
 const expressLayout = require("express-ejs-layouts");
 const dotEnv = require("dotenv");
 
-const indexRouter = require("./router");
 const connectDB = require("./config/database");
 
 //* load config 
@@ -19,15 +18,18 @@ const app = express();
 //* Views engine
 app.use(expressLayout);
 app.set("layout", "./layout/mainLayout")
-
 app.set("view engine", "ejs");
 app.set("views", "views");
 
+//* body parser 
+app.use(express.urlencoded({extended: false}));
 //* Static Folder
 app.use(express.static(path.join(__dirname, "public")));
 
 //* Routes 
-app.use(indexRouter)
+app.use("/dashboard", require("./router/dashboard"));
+app.use("/user", require("./router/user"));
+app.use("/", require("./router/blog"));
 
 const PORT = process.env.PORT || 5000;
 
